@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request
 from psycopg2.extras import RealDictCursor
 import psycopg2
 from auth import auth
+from src import groupcon
+from src import dbconnect
 
 app = Flask(__name__)
 userid = ''
@@ -26,13 +28,10 @@ def get_db_connection():
 # # Create a connection to the database
 # conn = mysql.connector.connect(**db_config)
 # cursor = conn.cursor()
-@app.route('/', methods=['GET'])
-def get_data():
-    return 'haaaaaiiiiiiiiii'
 
 
 # API route to fetch data from the database
-@app.route('/first', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_data():
     try:
         conn = get_db_connection()
@@ -70,6 +69,16 @@ def insert_data():
     except Exception as e:
         return jsonify({'error': str(e)})
 
+@app.route('/creategroup', methods=['POST'])
+def addgroup():
+    try:
+        data = request.json
+        result = groupcon.addgroup(data)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 
 @app.route('/api/token', methods=['POST'])
 def token_generation():
@@ -80,4 +89,4 @@ def token_generation():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000)
+    app.run(debug=True)
