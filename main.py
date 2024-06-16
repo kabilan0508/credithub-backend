@@ -26,10 +26,13 @@ def get_db_connection():
 # # Create a connection to the database
 # conn = mysql.connector.connect(**db_config)
 # cursor = conn.cursor()
+@app.route('/', methods=['GET'])
+def get_data():
+    return 'haaaaaiiiiiiiiii'
 
 
 # API route to fetch data from the database
-@app.route('/', methods=['GET'])
+@app.route('/first', methods=['GET'])
 def get_data():
     try:
         conn = get_db_connection()
@@ -75,3 +78,6 @@ def token_generation():
     except Exception as e:
         return jsonify({'error': str(e)})
 
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0",port=5000)
